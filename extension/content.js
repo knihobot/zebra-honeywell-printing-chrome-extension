@@ -12,7 +12,7 @@ window.addEventListener("message", function (event) {
         return;
     }
 
-    if (event.data.type != 'zebra_print_label' && event.data.type != 'honeywell_print_label') {
+    if (event.data.type !== 'zebra_print_label' && event.data.type !== 'honeywell_print_label') {
         return;
     }
 
