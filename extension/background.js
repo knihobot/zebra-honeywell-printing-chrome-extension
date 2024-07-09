@@ -1,26 +1,26 @@
-console.log('background.js loaded');
+console.log('Service worker loaded');
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
 
-    var isHoneywell = message.type === 'honeywell_print_label';
+    const isHoneywell = message.type === 'honeywell_print_label';
+    const url = isHoneywell ? `http://${message.ip}/service/printercommand.lua?command=${encodeURIComponent(message.zpl)}` : `http://${message.ip}/pstprnt`;
 
-    var url = isHoneywell ? 'http://' + message.ip + '/service/printercommand.lua?command=' + encodeURIComponent(message.zpl) : 'http://' + message.ip + '/pstprnt';
+    fetch(url, {
+        method: isHoneywell ? 'GET' : 'POST',
+        headers: {
+            'Content-Type': isHoneywell ? 'application/json' : 'text/plain'
+        },
+        body: isHoneywell ? null : message.zpl
+    })
+        .then(response => sendResponse({ status: response.status }))
+        .catch(error => console.error('Error:', error));
 
-    var request = new XMLHttpRequest();
-
-    request.onload = function () {
-        sendResponse({ status: request.status });
-    }
-
-    request.open(isHoneywell ? 'GET' : 'POST', url, true);
-    request.send(isHoneywell ? undefined : message.zpl);
-
-    return true;
+    return true; // Indicates that the response will be sent asynchronously
 });
 
-chrome.browserAction.onClicked.addListener(function (tab) {
+chrome.action.onClicked.addListener((tab) => {
     chrome.tabs.create({
-        'url': chrome.extension.getURL('options.html')
+        'url': chrome.runtime.getURL('options.html')
     });
 });
