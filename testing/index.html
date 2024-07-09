@@ -2,7 +2,8 @@
 
 <body>
     <h1>Zebra Printing Extension Test Page</h1>
-    <button id="btn">Print</button>
+    <button id="btn-zebra">Print on Zebra printer</button>
+    <button id="btn-honeywell">Print on Honeywell printer</button>
 </body>
 
 <script>
@@ -14,12 +15,21 @@
             console.log(event.data);
         });
 
-        document.getElementById("btn").addEventListener("click", function () {
-            console.log('Sending print message from the web page...');
+        document.getElementById("btn-zebra").addEventListener("click", function () {
+            console.log('Sending print message from the web page on the Zebra printer...');
             window.postMessage({
                 type: "zebra_print_label",
                 zpl: "^XA^PW400^LL200^FO20,20^A0N,30,30^FDThis is a TEST^FS^XZ",
-                url: "http://192.168.38.10/pstprnt"
+                ip: "192.168.102.73"
+            }, "*");
+        }, false);
+
+        document.getElementById("btn-honeywell").addEventListener("click", function () {
+            console.log('Sending print message from the web page on the Honeywell printer...');
+            window.postMessage({
+                type: "honeywell_print_label",
+                zpl: "^XA^PW400^LL200^FO20,20^A0N,30,30^FDThis is a TEST^FS^XZ",
+                ip: "192.168.102.234"
             }, "*");
         }, false);
     })();

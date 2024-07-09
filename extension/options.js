@@ -3,9 +3,9 @@ var print = document.getElementById('print');
 print.onclick = function () {
     console.log('Print button clicked.');
     chrome.extension.sendMessage({
-        type: "zebra_print_label",
+        type: document.getElementById('printerType').value,
         zpl: document.getElementById('zpl').value,
-        url: "http://" + document.getElementById('printerAddress').value + "/pstprnt"
+        ip: document.getElementById('printerAddress').value
     });
     return false;
 }
