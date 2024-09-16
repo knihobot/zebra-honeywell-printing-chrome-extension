@@ -1,23 +1,26 @@
-console.log('Service worker loaded');
+console.log("Service worker loaded");
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log(message);
+  console.log(message);
 
-    fetch(`http://${message.ip}/pstprnt`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: message.zpl
-    })
-        .then(response => sendResponse({ status: response.status }))
-        .catch(error => console.error('Error:', error));
+  fetch(`http://${message.ip}/pstprnt`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain",
+    },
+    body: message.zpl,
+  })
+    .then((response) => sendResponse({ status: response.status }))
+    .catch((error) => {
+      console.error("Error:", error);
+      sendResponse({ error: error.message });
+    });
 
-    return true;
+  return true;
 });
 
 chrome.action.onClicked.addListener((tab) => {
-    chrome.tabs.create({
-        'url': chrome.runtime.getURL('options.html')
-    });
+  chrome.tabs.create({
+    url: chrome.runtime.getURL("options.html"),
+  });
 });
