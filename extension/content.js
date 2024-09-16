@@ -8,11 +8,7 @@ window.postMessage({
 
 // Listen to messages from the current website
 window.addEventListener("message", function (event) {
-    if (typeof event.data.type === 'undefined') {
-        return;
-    }
-
-    if (event.data.type !== 'zebra_print_label' && event.data.type !== 'honeywell_print_label') {
+    if (typeof event.data.type === 'undefined' && event.data.type !== 'zebra_print_label') {
         return;
     }
 
